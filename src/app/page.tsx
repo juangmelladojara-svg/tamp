@@ -101,34 +101,9 @@ const proceso = [
   { n: "05", t: "Soporte", d: "Medimos, ajustamos y evolucionamos contigo." },
 ];
 
-const metricas = [
-  { count: 42, suffix: "+", label: "Proyectos entregados" },
-  { count: 120, prefix: "−", suffix: " h", label: "Horas/mes automatizadas" },
-  { count: 100, suffix: "%", label: "Hecho a medida" },
-  { count: 3, prefix: "×", suffix: "", label: "Más rápido al entregar" },
-];
-
 const stack = [
   "Next.js", "React", "TypeScript", "Tailwind", "Supabase",
   "n8n", "Vercel", "PostgreSQL", "OpenAI", "Stripe",
-];
-
-const testimonios = [
-  {
-    q: "Dejamos de copiar datos a mano entre tres sistemas. Lo que tomaba un día ahora pasa solo.",
-    a: "Gerente de Operaciones",
-    e: "Distribuidora consolidada",
-  },
-  {
-    q: "No nos hicieron una página: nos hicieron una herramienta que usamos todos los días.",
-    a: "Fundadora",
-    e: "Pyme de servicios",
-  },
-  {
-    q: "Respuesta rápida, código ordenado y soporte real. Por fin un equipo técnico de confianza.",
-    a: "Director Comercial",
-    e: "Empresa manufacturera",
-  },
 ];
 
 const faqs = [
@@ -150,10 +125,6 @@ const faqs = [
   },
 ];
 
-function formatCount(v: number, prefix = "", suffix = "") {
-  return `${prefix}${Math.round(v)}${suffix}`;
-}
-
 export default function Home() {
   const root = useRef<HTMLElement>(null);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -161,6 +132,7 @@ export default function Home() {
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
+    const tiltCleanups: Array<() => void> = [];
     const ctx = gsap.context(() => {
       // Cascada del hero al cargar
       gsap.to("[data-hero]", {
@@ -172,6 +144,19 @@ export default function Home() {
         delay: 0.1,
       });
       gsap.set("[data-hero]", { y: 30 });
+
+      // Flujo del hero: el punto recorre cada línea en loop (entra → sale)
+      gsap.set("[data-flow-dot]", { left: "0%" });
+      ["in", "out"].forEach((flow, i) => {
+        gsap.to(`[data-flow-dot="${flow}"]`, {
+          left: "calc(100% - 6px)",
+          duration: 1.1,
+          ease: "power1.inOut",
+          repeat: -1,
+          repeatDelay: 0.9,
+          delay: 1.2 + i * 0.55,
+        });
+      });
 
       // Reveals genéricos al hacer scroll
       gsap.utils.toArray<HTMLElement>("[data-reveal]").forEach((el) => {
@@ -217,32 +202,52 @@ export default function Home() {
         );
       });
 
-      // Conteo de métricas
-      gsap.utils.toArray<HTMLElement>("[data-count]").forEach((el) => {
-        const end = Number(el.dataset.count);
-        const prefix = el.dataset.prefix ?? "";
-        const suffix = el.dataset.suffix ?? "";
-        const obj = { v: 0 };
-        gsap.to(obj, {
-          v: end,
-          duration: 1.6,
-          ease: "power2.out",
-          scrollTrigger: { trigger: el, start: "top 88%" },
-          onUpdate: () => {
-            el.textContent = formatCount(obj.v, prefix, suffix);
-          },
+      // Tilt 3D sutil en las bento cards (Servicios + Sectores), con el ícono reaccionando
+      gsap.utils.toArray<HTMLElement>("[data-bento]").forEach((card) => {
+        const icon = card.querySelector<HTMLElement>("[data-bento-icon]");
+        gsap.set(card, { transformPerspective: 700 });
+
+        const setRotateX = gsap.quickTo(card, "rotationX", { duration: 0.6, ease: "power3.out" });
+        const setRotateY = gsap.quickTo(card, "rotationY", { duration: 0.6, ease: "power3.out" });
+        const setIconX = icon ? gsap.quickTo(icon, "x", { duration: 0.5, ease: "power3.out" }) : null;
+        const setIconY = icon ? gsap.quickTo(icon, "y", { duration: 0.5, ease: "power3.out" }) : null;
+
+        const onMove = (e: MouseEvent) => {
+          const r = card.getBoundingClientRect();
+          const px = (e.clientX - r.left) / r.width - 0.5;
+          const py = (e.clientY - r.top) / r.height - 0.5;
+          setRotateY(px * 6);
+          setRotateX(py * -6);
+          setIconX?.(px * 10);
+          setIconY?.(py * 10);
+        };
+        const onLeave = () => {
+          setRotateY(0);
+          setRotateX(0);
+          setIconX?.(0);
+          setIconY?.(0);
+        };
+
+        card.addEventListener("mousemove", onMove);
+        card.addEventListener("mouseleave", onLeave);
+        tiltCleanups.push(() => {
+          card.removeEventListener("mousemove", onMove);
+          card.removeEventListener("mouseleave", onLeave);
         });
       });
+
     }, root);
 
-    return () => ctx.revert();
+    return () => {
+      tiltCleanups.forEach((fn) => fn());
+      ctx.revert();
+    };
   }, []);
 
   const nav = [
     { href: "#servicios", label: "Servicios" },
     { href: "#sectores", label: "Sectores" },
     { href: "#proceso", label: "Proceso" },
-    { href: "#resultados", label: "Resultados" },
     { href: "#faq", label: "Preguntas" },
   ];
 
@@ -386,14 +391,14 @@ export default function Home() {
             <div className="bezel-core p-6 md:p-10">
               <div className="flex items-center justify-between gap-3 text-center md:gap-6">
                 <FlowNode label="Formulario" />
-                <FlowLine />
+                <FlowLine flow="in" />
                 <div className="flex flex-col items-center gap-2">
                   <div className="grid h-16 w-16 place-items-center rounded-2xl bg-ink-900 text-ink-50 md:h-20 md:w-20">
                     <Zap className="h-6 w-6" strokeWidth={1.5} />
                   </div>
                   <span className="font-mono text-[11px] uppercase tracking-widest text-accent">TAMP</span>
                 </div>
-                <FlowLine />
+                <FlowLine flow="out" />
                 <div className="flex flex-col gap-2.5">
                   <FlowNode label="Email" small />
                   <FlowNode label="CRM" small />
@@ -442,7 +447,7 @@ export default function Home() {
                   className={`reveal group flex flex-col justify-between rounded-[1.75rem] border border-black/5 bg-white/60 p-7 transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:bg-white hover:soft-shadow ${s.span}`}
                 >
                   <div className="flex items-start justify-between">
-                    <span className="grid h-11 w-11 place-items-center rounded-xl bg-ink-900 text-ink-50">
+                    <span data-bento-icon className="grid h-11 w-11 place-items-center rounded-xl bg-ink-900 text-ink-50">
                       <Icon className="h-5 w-5" strokeWidth={STROKE} />
                     </span>
                     <ArrowUpRight
@@ -491,7 +496,7 @@ export default function Home() {
                   className="reveal group flex flex-col justify-between rounded-[1.75rem] border border-black/5 bg-white/60 p-7 transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:bg-white hover:soft-shadow"
                 >
                   <div className="flex items-start justify-between">
-                    <span className="grid h-11 w-11 place-items-center rounded-xl bg-ink-900 text-ink-50">
+                    <span data-bento-icon className="grid h-11 w-11 place-items-center rounded-xl bg-ink-900 text-ink-50">
                       <Icon className="h-5 w-5" strokeWidth={STROKE} />
                     </span>
                     <ArrowUpRight
@@ -518,21 +523,6 @@ export default function Home() {
               .
             </p>
           </div>
-        </div>
-      </section>
-
-      {/* ---------------- MANIFIESTO (scrub) ---------------- */}
-      <section className="px-5 py-28 md:py-44">
-        <div className="manifesto mx-auto max-w-4xl text-center">
-          <p className="font-display text-3xl font-medium leading-[1.35] tracking-tight md:text-5xl md:leading-[1.3]">
-            {"No entregamos páginas bonitas que no hacen nada. Entregamos herramientas que trabajan por ti."
-              .split(" ")
-              .map((w, i) => (
-                <span key={i} className="word inline-block">
-                  {w}&nbsp;
-                </span>
-              ))}
-          </p>
         </div>
       </section>
 
@@ -568,59 +558,18 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ---------------- RESULTADOS ---------------- */}
-      <section id="resultados" className="px-5 py-28 md:py-36">
-        <div className="mx-auto max-w-6xl">
-          <div data-reveal className="reveal mb-12 flex flex-col items-baseline justify-between gap-4 md:flex-row">
-            <h2 className="max-w-xl font-display text-4xl font-semibold leading-tight tracking-tight md:text-5xl">
-              Lo que cambia cuando el software trabaja por ti.
-            </h2>
-            <p className="label">Resultados reales</p>
-          </div>
-
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-            {metricas.map((m) => (
-              <div
-                key={m.label}
-                data-reveal
-                className="reveal rounded-[1.5rem] border border-black/5 bg-white/60 p-7"
-              >
-                <p
-                  data-count={m.count}
-                  data-prefix={m.prefix ?? ""}
-                  data-suffix={m.suffix ?? ""}
-                  className="font-display text-5xl font-semibold tracking-tight md:text-6xl"
-                >
-                  {m.prefix ?? ""}0{m.suffix ?? ""}
-                </p>
-                <p className="mt-3 text-sm text-ink-500">{m.label}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ---------------- TESTIMONIOS ---------------- */}
-      <section className="px-5 py-20 md:py-28">
-        <div className="mx-auto max-w-6xl">
-          <p data-reveal className="reveal label mb-10">En sus palabras</p>
-          <div className="grid gap-4 md:grid-cols-3">
-            {testimonios.map((t, i) => (
-              <figure
-                key={i}
-                data-reveal
-                className="reveal flex flex-col justify-between rounded-[1.75rem] border border-black/5 bg-white/60 p-8"
-              >
-                <blockquote className="font-display text-xl font-medium leading-snug tracking-tight">
-                  “{t.q}”
-                </blockquote>
-                <figcaption className="mt-8 border-t border-black/8 pt-4">
-                  <p className="font-medium text-ink-800">{t.a}</p>
-                  <p className="text-sm text-ink-400">{t.e}</p>
-                </figcaption>
-              </figure>
-            ))}
-          </div>
+      {/* ---------------- MANIFIESTO (scrub) ---------------- */}
+      <section className="px-5 py-28 md:py-44">
+        <div className="manifesto mx-auto max-w-4xl text-center">
+          <p className="font-display text-3xl font-medium leading-[1.35] tracking-tight md:text-5xl md:leading-[1.3]">
+            {"No entregamos páginas bonitas que no hacen nada. Entregamos herramientas que trabajan por ti."
+              .split(" ")
+              .map((w, i) => (
+                <span key={i} className="word inline-block">
+                  {w}&nbsp;
+                </span>
+              ))}
+          </p>
         </div>
       </section>
 
@@ -745,10 +694,13 @@ function FlowNode({ label, small = false }: { label: string; small?: boolean }) 
   );
 }
 
-function FlowLine() {
+function FlowLine({ flow }: { flow: "in" | "out" }) {
   return (
     <div className="relative h-px flex-1 bg-ink-200">
-      <span className="absolute right-0 top-1/2 h-1.5 w-1.5 -translate-y-1/2 rounded-full bg-accent" />
+      <span
+        data-flow-dot={flow}
+        className="absolute left-0 top-1/2 h-1.5 w-1.5 -translate-y-1/2 rounded-full bg-accent"
+      />
     </div>
   );
 }

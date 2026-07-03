@@ -4,11 +4,11 @@ import { useEffect, useRef } from "react";
 
 /**
  * Red de partículas estilo constelación (canvas, sin librerías).
- * Puntos rojos que se mueven y se conectan entre sí y hacia el cursor.
+ * Puntos que se mueven y se conectan entre sí y hacia el cursor.
  * Pensada como fondo del hero: pointer-events-none, fade en los bordes,
  * y se detiene con prefers-reduced-motion.
  */
-const ACCENT = "207, 46, 46"; // rojo Snoop (#cf2e2e) en RGB
+const ACCENT = "79, 70, 229"; // acento único de marca (#4f46e5) en RGB
 
 type P = { x: number; y: number; vx: number; vy: number };
 

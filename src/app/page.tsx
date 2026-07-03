@@ -30,9 +30,10 @@ const servicios = [
   {
     icon: Code2,
     titulo: "Desarrollo web a medida",
-    desc: "Sitios y aplicaciones construidos con Next.js y React. Rápidos, propios y pensados para crecer contigo — nada de plantillas genéricas.",
+    desc: "Sitios y aplicaciones construidos con Next.js y React. Rápidos, propios y pensados para crecer contigo, sin plantillas genéricas.",
     span: "md:col-span-4 md:row-span-2",
     big: true,
+    dark: true,
   },
   {
     icon: Workflow,
@@ -51,6 +52,7 @@ const servicios = [
     titulo: "Agentes de IA",
     desc: "Asistentes que responden, clasifican y ejecutan tareas por ti, día y noche.",
     span: "md:col-span-3",
+    dark: true,
   },
   {
     icon: LifeBuoy,
@@ -75,6 +77,7 @@ const sectores = [
     icon: HeartPulse,
     titulo: "Salud & Bienestar",
     desc: "Reservas, fichas y recordatorios automáticos para tus pacientes.",
+    dark: true,
   },
   {
     icon: Truck,
@@ -102,8 +105,15 @@ const proceso = [
 ];
 
 const stack = [
-  "Next.js", "React", "TypeScript", "Tailwind", "Supabase",
-  "n8n", "Vercel", "PostgreSQL", "OpenAI", "Stripe",
+  { name: "Next.js", slug: "nextdotjs" },
+  { name: "React", slug: "react" },
+  { name: "TypeScript", slug: "typescript" },
+  { name: "Tailwind CSS", slug: "tailwindcss" },
+  { name: "Supabase", slug: "supabase" },
+  { name: "n8n", slug: "n8n" },
+  { name: "Vercel", slug: "vercel" },
+  { name: "PostgreSQL", slug: "postgresql" },
+  { name: "Stripe", slug: "stripe" },
 ];
 
 const faqs = [
@@ -385,8 +395,13 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Visual: flujo de automatización (doble bisel) */}
+        {/* Visual: flujo de automatización (doble bisel), con una cinta de
+            gradiente detrás asomando por el borde (referencia: stripe.com) */}
         <div data-hero className="reveal relative z-10 mx-auto mt-16 max-w-4xl">
+          <div
+            aria-hidden
+            className="mesh-ribbon pointer-events-none absolute -inset-x-10 -top-16 -bottom-24 -z-10 opacity-40 md:-inset-x-24"
+          />
           <div className="bezel soft-shadow">
             <div className="bezel-core p-6 md:p-10">
               <div className="flex items-center justify-between gap-3 text-center md:gap-6">
@@ -419,8 +434,10 @@ export default function Home() {
         <div className="relative flex overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_12%,#000_88%,transparent)]">
           <div className="flex shrink-0 animate-marquee items-center gap-14 pr-14">
             {[...stack, ...stack].map((s, i) => (
-              <span key={i} className="font-display text-xl font-medium text-ink-300 whitespace-nowrap">
-                {s}
+              <span key={i} className="flex items-center gap-2.5 whitespace-nowrap">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={`https://cdn.simpleicons.org/${s.slug}`} alt="" className="h-6 w-6 shrink-0" />
+                <span className="font-display text-xl font-medium text-ink-400">{s.name}</span>
               </span>
             ))}
           </div>
@@ -444,26 +461,44 @@ export default function Home() {
                 <div
                   key={s.titulo}
                   data-bento
-                  className={`reveal group flex flex-col justify-between rounded-[1.75rem] border border-black/5 bg-white/60 p-7 transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:bg-white hover:soft-shadow ${s.span}`}
+                  className={`reveal group relative flex flex-col justify-between overflow-hidden rounded-[1.75rem] border p-7 transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] ${
+                    s.dark
+                      ? "border-white/10 bg-ink-900 hover:soft-shadow"
+                      : "border-black/5 bg-white/60 hover:bg-white hover:soft-shadow"
+                  } ${s.span}`}
                 >
-                  <div className="flex items-start justify-between">
-                    <span data-bento-icon className="grid h-11 w-11 place-items-center rounded-xl bg-ink-900 text-ink-50">
+                  {s.dark && (
+                    <div aria-hidden className="mesh-ribbon pointer-events-none absolute -inset-16 opacity-50" />
+                  )}
+                  <div className="relative flex items-start justify-between">
+                    <span
+                      data-bento-icon
+                      className={`grid h-11 w-11 place-items-center rounded-xl ${
+                        s.dark ? "bg-white/15 text-ink-50" : "bg-ink-900 text-ink-50"
+                      }`}
+                    >
                       <Icon className="h-5 w-5" strokeWidth={STROKE} />
                     </span>
                     <ArrowUpRight
-                      className="h-5 w-5 text-ink-300 transition-all duration-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-ink-900"
+                      className={`h-5 w-5 transition-all duration-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 ${
+                        s.dark ? "text-white/40 group-hover:text-white" : "text-ink-300 group-hover:text-ink-900"
+                      }`}
                       strokeWidth={STROKE}
                     />
                   </div>
-                  <div className="mt-8">
+                  <div className="relative mt-8">
                     <h3
-                      className={`font-display font-semibold tracking-tight ${
+                      className={`font-display font-semibold tracking-tight ${s.dark ? "text-ink-50" : ""} ${
                         s.big ? "text-3xl md:text-4xl" : "text-xl"
                       }`}
                     >
                       {s.titulo}
                     </h3>
-                    <p className={`mt-2 text-ink-500 ${s.big ? "max-w-md text-lg" : "text-sm"}`}>
+                    <p
+                      className={`mt-2 ${s.dark ? "text-ink-300" : "text-ink-500"} ${
+                        s.big ? "max-w-md text-lg" : "text-sm"
+                      }`}
+                    >
                       {s.desc}
                     </p>
                   </div>
@@ -493,20 +528,38 @@ export default function Home() {
                 <div
                   key={s.titulo}
                   data-bento
-                  className="reveal group flex flex-col justify-between rounded-[1.75rem] border border-black/5 bg-white/60 p-7 transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:bg-white hover:soft-shadow"
+                  className={`reveal group relative flex flex-col justify-between overflow-hidden rounded-[1.75rem] border p-7 transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] ${
+                    s.dark
+                      ? "border-white/10 bg-ink-900 hover:soft-shadow"
+                      : "border-black/5 bg-white/60 hover:bg-white hover:soft-shadow"
+                  }`}
                 >
-                  <div className="flex items-start justify-between">
-                    <span data-bento-icon className="grid h-11 w-11 place-items-center rounded-xl bg-ink-900 text-ink-50">
+                  {s.dark && (
+                    <div aria-hidden className="mesh-ribbon pointer-events-none absolute -inset-16 opacity-50" />
+                  )}
+                  <div className="relative flex items-start justify-between">
+                    <span
+                      data-bento-icon
+                      className={`grid h-11 w-11 place-items-center rounded-xl ${
+                        s.dark ? "bg-white/15 text-ink-50" : "bg-ink-900 text-ink-50"
+                      }`}
+                    >
                       <Icon className="h-5 w-5" strokeWidth={STROKE} />
                     </span>
                     <ArrowUpRight
-                      className="h-5 w-5 text-ink-300 transition-all duration-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-ink-900"
+                      className={`h-5 w-5 transition-all duration-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 ${
+                        s.dark ? "text-white/40 group-hover:text-white" : "text-ink-300 group-hover:text-ink-900"
+                      }`}
                       strokeWidth={STROKE}
                     />
                   </div>
-                  <div className="mt-10">
-                    <h3 className="font-display text-xl font-semibold tracking-tight">{s.titulo}</h3>
-                    <p className="mt-2 text-sm text-ink-500">{s.desc}</p>
+                  <div className="relative mt-10">
+                    <h3
+                      className={`font-display text-xl font-semibold tracking-tight ${s.dark ? "text-ink-50" : ""}`}
+                    >
+                      {s.titulo}
+                    </h3>
+                    <p className={`mt-2 text-sm ${s.dark ? "text-ink-300" : "text-ink-500"}`}>{s.desc}</p>
                   </div>
                 </div>
               );
@@ -558,10 +611,11 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ---------------- MANIFIESTO (scrub) ---------------- */}
-      <section className="px-5 py-28 md:py-44">
-        <div className="manifesto mx-auto max-w-4xl text-center">
-          <p className="font-display text-3xl font-medium leading-[1.35] tracking-tight md:text-5xl md:leading-[1.3]">
+      {/* ---------------- MANIFIESTO (scrub, banda oscura de remate) ---------------- */}
+      <section className="relative overflow-hidden bg-ink-900 px-5 py-28 md:py-44">
+        <div aria-hidden className="mesh-ribbon pointer-events-none absolute -inset-24 opacity-30" />
+        <div className="manifesto relative mx-auto max-w-4xl text-center">
+          <p className="font-display text-3xl font-medium leading-[1.35] tracking-tight text-ink-50 md:text-5xl md:leading-[1.3]">
             {"No entregamos páginas bonitas que no hacen nada. Entregamos herramientas que trabajan por ti."
               .split(" ")
               .map((w, i) => (

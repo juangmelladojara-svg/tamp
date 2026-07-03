@@ -76,6 +76,31 @@ body {
     text-transform: uppercase;
     color: var(--color-ink-400);
   }
+
+  /* Malla de gradiente "cinta de seda" (referencia: stripe.com), en la
+     familia del único acento de marca. Se usa como fondo con drift lento
+     detrás del diagrama del hero y en las bento cards con más peso. */
+  .mesh-ribbon {
+    background: conic-gradient(
+      from 200deg at 30% 20%,
+      rgba(79, 70, 229, 0.65),
+      rgba(139, 92, 246, 0.55) 25%,
+      rgba(244, 63, 94, 0.5) 50%,
+      rgba(245, 158, 11, 0.45) 72%,
+      rgba(79, 70, 229, 0.65) 100%
+    );
+    filter: blur(60px);
+    animation: mesh-drift 28s ease-in-out infinite alternate;
+  }
+}
+
+@keyframes mesh-drift {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+  100% {
+    transform: rotate(10deg) scale(1.12);
+  }
 }
 
 /* Grano de película sutil, fijo y sin interacción */
@@ -101,6 +126,9 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .reveal {
     opacity: 1 !important;
+  }
+  .mesh-ribbon {
+    animation: none !important;
   }
   *,
   *::before,

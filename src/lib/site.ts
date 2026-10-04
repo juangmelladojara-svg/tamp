@@ -9,11 +9,11 @@
 import { faqs, servicios } from "./contenido";
 
 /**
- * URL pública del sitio. Para pasar al dominio definitivo (tamp.cl) basta con
- * definir NEXT_PUBLIC_SITE_URL=https://tamp.cl en Vercel y volver a desplegar.
+ * URL pública del sitio: el dominio propio tamp.cl (registrado en NIC Chile,
+ * DNS en Vercel). NEXT_PUBLIC_SITE_URL permite sobrescribirla si hiciera falta.
  */
 export const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ?? "https://tamp-chi.vercel.app";
+  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ?? "https://tamp.cl";
 
 export const WHATSAPP_NUMBER = "56938940094";
 export const WHATSAPP_LINK = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(

@@ -21,7 +21,13 @@ import {
   Truck,
   GraduationCap,
   Factory,
+  MessageCircle,
 } from "lucide-react";
+
+const WHATSAPP_NUMBER = "56938940094";
+const WHATSAPP_LINK = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
+  "Hola, quiero conversar sobre un proyecto con TAMP."
+)}`;
 import ParticleField from "./ParticleField";
 
 const STROKE = 1.25;
@@ -276,11 +282,8 @@ export default function Home() {
       {/* ---------------- NAV (pill flotante) ---------------- */}
       <header className="fixed inset-x-0 top-0 z-40">
         <nav className="mx-auto mt-5 flex w-[min(960px,92%)] items-center justify-between rounded-full border border-black/5 bg-white/70 px-3 py-2.5 pl-5 backdrop-blur-xl">
-          <a href="#top" className="flex items-center gap-2">
-            <span className="grid h-7 w-7 place-items-center rounded-lg bg-ink-900 text-ink-50">
-              <Zap className="h-3.5 w-3.5" strokeWidth={2} />
-            </span>
-            <span className="font-display text-lg font-semibold tracking-tight">TAMP</span>
+          <a href="#top" className="flex items-center">
+            <Logo className="text-lg" />
           </a>
 
           <div className="hidden items-center gap-7 md:flex">
@@ -695,12 +698,14 @@ export default function Home() {
               </h2>
               <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
                 <a
-                  href="mailto:hola@tamp.cl"
+                  href={WHATSAPP_LINK}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-ink-50 py-4 pl-7 pr-2.5 font-medium text-ink-900 transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] active:scale-[0.98] sm:w-auto"
                 >
-                  Agenda una llamada
+                  Escríbenos por WhatsApp
                   <span className="grid h-8 w-8 place-items-center rounded-full bg-ink-900/10 transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
-                    <ArrowUpRight className="h-4 w-4" strokeWidth={STROKE} />
+                    <MessageCircle className="h-4 w-4" strokeWidth={STROKE} />
                   </span>
                 </a>
                 <a
@@ -710,6 +715,9 @@ export default function Home() {
                   hola@tamp.cl
                 </a>
               </div>
+              <p className="mt-5 text-sm text-ink-300">
+                +56 9 3894 0094 · Lun a Vie, 9:00–18:00
+              </p>
             </div>
           </div>
         </div>
@@ -718,20 +726,36 @@ export default function Home() {
       {/* ---------------- FOOTER ---------------- */}
       <footer className="px-5 pb-12 pt-8">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-6 border-t border-black/8 pt-8 md:flex-row">
-          <div className="flex items-center gap-2">
-            <span className="grid h-7 w-7 place-items-center rounded-lg bg-ink-900 text-ink-50">
-              <Zap className="h-3.5 w-3.5" strokeWidth={2} />
-            </span>
-            <span className="font-display text-lg font-semibold tracking-tight">TAMP</span>
-          </div>
+          <Logo className="text-lg" />
           <p className="flex items-center gap-2 text-sm text-ink-400">
             <Check className="h-4 w-4 text-accent" strokeWidth={STROKE} />
             Desarrollo y automatización web · Chile
           </p>
-          <p className="text-sm text-ink-400">© {new Date().getFullYear()} TAMP</p>
+          <div className="flex items-center gap-5">
+            <a
+              href={WHATSAPP_LINK}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 text-sm text-ink-400 transition-colors duration-300 hover:text-ink-900"
+            >
+              <MessageCircle className="h-4 w-4" strokeWidth={STROKE} />
+              +56 9 3894 0094
+            </a>
+            <p className="text-sm text-ink-400">© {new Date().getFullYear()} TAMP</p>
+          </div>
         </div>
       </footer>
     </main>
+  );
+}
+
+/* ---------------- Logotipo ---------------- */
+function Logo({ className = "" }: { className?: string }) {
+  return (
+    <span className={`font-display font-extrabold tracking-tight ${className}`}>
+      <span className="text-ink-900">TA</span>
+      <span className="text-brand-red">MP</span>
+    </span>
   );
 }
 

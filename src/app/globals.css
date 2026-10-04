@@ -27,6 +27,9 @@
   /* Acento único, usado con moderación */
   --color-accent: #4f46e5;
 
+  /* Rojo de marca, exclusivo del logotipo TAMP */
+  --color-brand-red: #e2231a;
+
   --animate-marquee: marquee 40s linear infinite;
 }
 

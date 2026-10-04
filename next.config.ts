@@ -10,6 +10,12 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [{ protocol: "https", hostname: "picsum.photos" }],
   },
+  // El favicon se genera en src/app/icon.tsx (/icon). Algunos navegadores y
+  // bots piden /favicon.ico directo sin leer el <link rel="icon">: se sirve
+  // el mismo PNG en esa ruta para que no den 404.
+  async rewrites() {
+    return [{ source: "/favicon.ico", destination: "/icon" }];
+  },
 };
 
 export default nextConfig;

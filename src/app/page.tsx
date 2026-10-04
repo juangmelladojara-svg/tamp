@@ -11,8 +11,6 @@ import {
   LifeBuoy,
   ArrowUpRight,
   ArrowRight,
-  Plus,
-  Minus,
   Check,
   Zap,
   ShoppingBag,
@@ -22,93 +20,45 @@ import {
   GraduationCap,
   Factory,
   MessageCircle,
+  type LucideIcon,
 } from "lucide-react";
 
-const WHATSAPP_NUMBER = "56938940094";
-const WHATSAPP_LINK = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
-  "Hola, quiero conversar sobre un proyecto con TAMP."
-)}`;
 import ParticleField from "./ParticleField";
+import FaqSection from "@/components/FaqSection";
+import { NEGOCIO, WHATSAPP_LINK } from "@/lib/site";
+import {
+  servicios as serviciosTexto,
+  sectores as sectoresTexto,
+  proceso,
+  type ServicioId,
+  type SectorId,
+} from "@/lib/contenido";
 
 const STROKE = 1.25;
 
-const servicios = [
-  {
-    icon: Code2,
-    titulo: "Desarrollo web a medida",
-    desc: "Sitios y aplicaciones construidos con Next.js y React. Rápidos, propios y pensados para crecer contigo, sin plantillas genéricas.",
-    span: "md:col-span-4 md:row-span-2",
-    big: true,
-    dark: true,
-  },
-  {
-    icon: Workflow,
-    titulo: "Automatización",
-    desc: "Flujos con n8n que eliminan el trabajo repetitivo.",
-    span: "md:col-span-2",
-  },
-  {
-    icon: Plug,
-    titulo: "Integraciones & APIs",
-    desc: "Conectamos tus herramientas para que hablen entre sí.",
-    span: "md:col-span-2",
-  },
-  {
-    icon: Bot,
-    titulo: "Agentes de IA",
-    desc: "Asistentes que responden, clasifican y ejecutan tareas por ti, día y noche.",
-    span: "md:col-span-3",
-    dark: true,
-  },
-  {
-    icon: LifeBuoy,
-    titulo: "Soporte & evolución",
-    desc: "No desaparecemos al entregar: mantenemos y hacemos crecer lo construido.",
-    span: "md:col-span-3",
-  },
-];
+// Textos en src/lib/contenido.ts (los comparten el JSON-LD y /llms.txt).
+// Aquí solo la presentación de cada tarjeta, indexada por id.
+type Presentacion = { icon: LucideIcon; span?: string; big?: boolean; dark?: boolean };
 
-const sectores = [
-  {
-    icon: ShoppingBag,
-    titulo: "Comercio & Retail",
-    desc: "Catálogo, ventas y stock conectados, online y en tienda, sin planillas sueltas.",
-  },
-  {
-    icon: Briefcase,
-    titulo: "Servicios Profesionales",
-    desc: "Agenda, cobros y seguimiento de clientes en un solo lugar.",
-  },
-  {
-    icon: HeartPulse,
-    titulo: "Salud & Bienestar",
-    desc: "Reservas, fichas y recordatorios automáticos para tus pacientes.",
-    dark: true,
-  },
-  {
-    icon: Truck,
-    titulo: "Logística & Distribución",
-    desc: "Pedidos, despachos y seguimiento que avanzan sin intervención manual.",
-  },
-  {
-    icon: GraduationCap,
-    titulo: "Educación & Formación",
-    desc: "Inscripciones, pagos y contenidos en una plataforma propia.",
-  },
-  {
-    icon: Factory,
-    titulo: "Manufactura & Industria",
-    desc: "Órdenes, inventario y producción bajo control y en tiempo real.",
-  },
-];
+const presentacionServicios: Record<ServicioId, Presentacion> = {
+  web: { icon: Code2, span: "md:col-span-4 md:row-span-2", big: true, dark: true },
+  automatizacion: { icon: Workflow, span: "md:col-span-2" },
+  integraciones: { icon: Plug, span: "md:col-span-2" },
+  ia: { icon: Bot, span: "md:col-span-3", dark: true },
+  soporte: { icon: LifeBuoy, span: "md:col-span-3" },
+};
 
-const proceso = [
-  { n: "01", t: "Descubrimiento", d: "Entendemos tu negocio y dónde se te van las horas." },
-  { n: "02", t: "Diseño", d: "Definimos la herramienta: interfaz, datos y flujos." },
-  { n: "03", t: "Desarrollo", d: "Construimos con código propio, limpio y mantenible." },
-  { n: "04", t: "Automatización", d: "Conectamos procesos para que trabajen solos." },
-  { n: "05", t: "Soporte", d: "Medimos, ajustamos y evolucionamos contigo." },
-];
+const presentacionSectores: Record<SectorId, Presentacion> = {
+  retail: { icon: ShoppingBag },
+  profesionales: { icon: Briefcase },
+  salud: { icon: HeartPulse, dark: true },
+  logistica: { icon: Truck },
+  educacion: { icon: GraduationCap },
+  manufactura: { icon: Factory },
+};
+
+const servicios = serviciosTexto.map((s) => ({ ...s, ...presentacionServicios[s.id] }));
+const sectores = sectoresTexto.map((s) => ({ ...s, ...presentacionSectores[s.id] }));
 
 const stack = [
   { name: "Next.js", slug: "nextdotjs" },
@@ -122,29 +72,9 @@ const stack = [
   { name: "Stripe", slug: "stripe" },
 ];
 
-const faqs = [
-  {
-    q: "¿Trabajan con pymes o solo con empresas grandes?",
-    a: "Con ambas. Adaptamos el alcance: una pyme puede empezar con una herramienta puntual y una empresa consolidada con un sistema completo. Lo importante es resolver un problema real.",
-  },
-  {
-    q: "¿Qué significa exactamente 'automatización'?",
-    a: "Conectar tus herramientas y procesos para que tareas repetitivas (enviar correos, mover datos, generar reportes, responder consultas) ocurran solas, sin que nadie tenga que hacerlas a mano.",
-  },
-  {
-    q: "¿Me entregan el código o quedo amarrado a ustedes?",
-    a: "El código es tuyo. Construimos sobre tecnologías estándar y abiertas; puedes seguir con nosotros para evolucionarlo o llevártelo cuando quieras.",
-  },
-  {
-    q: "¿Cuánto tarda un proyecto?",
-    a: "Una herramienta acotada puede estar lista en semanas. Proyectos más grandes se entregan por etapas, con algo funcionando desde temprano.",
-  },
-];
-
 export default function Home() {
   const root = useRef<HTMLElement>(null);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [faqOpen, setFaqOpen] = useState<number | null>(0);
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -312,6 +242,8 @@ export default function Home() {
           <button
             onClick={() => setMenuOpen((v) => !v)}
             aria-label="Menú"
+            aria-expanded={menuOpen}
+            aria-controls="menu-movil"
             className="relative grid h-9 w-9 place-items-center md:hidden"
           >
             <span
@@ -327,30 +259,33 @@ export default function Home() {
           </button>
         </nav>
 
-        {/* Overlay móvil */}
-        {menuOpen && (
-          <div className="mx-auto mt-2 w-[92%] rounded-3xl border border-black/5 bg-white/85 p-6 backdrop-blur-2xl md:hidden">
-            <div className="flex flex-col gap-4">
-              {nav.map((n) => (
-                <a
-                  key={n.href}
-                  href={n.href}
-                  onClick={() => setMenuOpen(false)}
-                  className="font-display text-2xl font-medium text-ink-900"
-                >
-                  {n.label}
-                </a>
-              ))}
+        {/* Overlay móvil (siempre montado para que aria-controls apunte a algo;
+            se oculta con el atributo `hidden`) */}
+        <div
+          id="menu-movil"
+          hidden={!menuOpen}
+          className="mx-auto mt-2 w-[92%] rounded-3xl border border-black/5 bg-white/85 p-6 backdrop-blur-2xl md:hidden"
+        >
+          <div className="flex flex-col gap-4">
+            {nav.map((n) => (
               <a
-                href="#contacto"
+                key={n.href}
+                href={n.href}
                 onClick={() => setMenuOpen(false)}
-                className="mt-2 inline-flex items-center justify-center gap-2 rounded-full bg-ink-900 py-3 text-sm font-medium text-ink-50"
+                className="font-display text-2xl font-medium text-ink-900"
               >
-                Agenda una llamada <ArrowUpRight className="h-4 w-4" strokeWidth={STROKE} />
+                {n.label}
               </a>
-            </div>
+            ))}
+            <a
+              href="#contacto"
+              onClick={() => setMenuOpen(false)}
+              className="mt-2 inline-flex items-center justify-center gap-2 rounded-full bg-ink-900 py-3 text-sm font-medium text-ink-50"
+            >
+              Agenda una llamada <ArrowUpRight className="h-4 w-4" strokeWidth={STROKE} />
+            </a>
           </div>
-        )}
+        </div>
       </header>
 
       {/* ---------------- HERO ---------------- */}
@@ -631,48 +566,7 @@ export default function Home() {
       </section>
 
       {/* ---------------- FAQ ---------------- */}
-      <section id="faq" className="px-5 py-20 md:py-28">
-        <div className="mx-auto grid max-w-6xl gap-12 md:grid-cols-[0.8fr_1.2fr] md:gap-16">
-          <div>
-            <p className="label mb-4">Preguntas</p>
-            <h2 className="font-display text-4xl font-semibold leading-tight tracking-tight md:text-5xl">
-              Lo que suelen preguntarnos.
-            </h2>
-          </div>
-          <div className="flex flex-col">
-            {faqs.map((f, i) => {
-              const open = faqOpen === i;
-              return (
-                <div key={i} className="border-t border-black/8 last:border-b">
-                  <button
-                    onClick={() => setFaqOpen(open ? null : i)}
-                    className="flex w-full items-center justify-between gap-6 py-6 text-left"
-                  >
-                    <span className="font-display text-lg font-medium tracking-tight md:text-xl">
-                      {f.q}
-                    </span>
-                    <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-black/10">
-                      {open ? (
-                        <Minus className="h-4 w-4" strokeWidth={STROKE} />
-                      ) : (
-                        <Plus className="h-4 w-4" strokeWidth={STROKE} />
-                      )}
-                    </span>
-                  </button>
-                  <div
-                    className="grid overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)]"
-                    style={{ gridTemplateRows: open ? "1fr" : "0fr" }}
-                  >
-                    <div className="overflow-hidden">
-                      <p className="max-w-xl pb-6 text-ink-500">{f.a}</p>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
+      <FaqSection />
 
       {/* ---------------- CTA FINAL ---------------- */}
       <section id="contacto" className="px-5 py-20 md:py-28">
@@ -709,14 +603,14 @@ export default function Home() {
                   </span>
                 </a>
                 <a
-                  href="mailto:hola@tamp.cl"
+                  href={`mailto:${NEGOCIO.email}`}
                   className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-white/15 py-4 px-7 font-medium text-ink-100 transition-colors duration-300 hover:bg-white/10 sm:w-auto"
                 >
-                  hola@tamp.cl
+                  {NEGOCIO.email}
                 </a>
               </div>
               <p className="mt-5 text-sm text-ink-300">
-                +56 9 3894 0094 · Lun a Vie, 9:00–18:00
+                {NEGOCIO.telefonoVisible} · {NEGOCIO.horario.texto}
               </p>
             </div>
           </div>
@@ -739,7 +633,7 @@ export default function Home() {
               className="flex items-center gap-1.5 text-sm text-ink-400 transition-colors duration-300 hover:text-ink-900"
             >
               <MessageCircle className="h-4 w-4" strokeWidth={STROKE} />
-              +56 9 3894 0094
+              {NEGOCIO.telefonoVisible}
             </a>
             <p className="text-sm text-ink-400">© {new Date().getFullYear()} TAMP</p>
           </div>

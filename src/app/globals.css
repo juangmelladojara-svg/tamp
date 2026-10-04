@@ -126,12 +126,31 @@ body {
   }
 }
 
+/* FAQ con <details> nativo: apertura suave, misma curva que el acordeón
+   anterior. Mejora progresiva: donde no hay soporte, abre sin animación. */
+.faq-item {
+  interpolate-size: allow-keywords;
+}
+.faq-item::details-content {
+  block-size: 0;
+  overflow: hidden;
+  transition:
+    block-size 0.5s cubic-bezier(0.32, 0.72, 0, 1),
+    content-visibility 0.5s allow-discrete;
+}
+.faq-item[open]::details-content {
+  block-size: auto;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .reveal {
     opacity: 1 !important;
   }
   .mesh-ribbon {
     animation: none !important;
+  }
+  .faq-item::details-content {
+    transition: none !important;
   }
   *,
   *::before,

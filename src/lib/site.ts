@@ -25,7 +25,7 @@ export const NEGOCIO = {
   eslogan: "Más que una web, una herramienta.",
   descripcion:
     "Estudio de desarrollo y automatización web. Construimos sitios a medida y automatizamos los procesos que mueven tu negocio — para pymes y empresas consolidadas.",
-  email: "hola@tamp.cl",
+  email: "jmellado@tamp.cl",
   telefono: "+56938940094",
   telefonoVisible: "+56 9 3894 0094",
   whatsapp: WHATSAPP_LINK,

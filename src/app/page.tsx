@@ -25,6 +25,7 @@ import {
 
 import ParticleField from "./ParticleField";
 import FaqSection from "@/components/FaqSection";
+import Logo from "@/components/Logo";
 import { NEGOCIO, WHATSAPP_LINK } from "@/lib/site";
 import {
   servicios as serviciosTexto,
@@ -195,6 +196,7 @@ export default function Home() {
     { href: "#sectores", label: "Sectores" },
     { href: "#proceso", label: "Proceso" },
     { href: "#faq", label: "Preguntas" },
+    { href: "/diagnostico", label: "Diagnóstico gratis" },
   ];
 
   return (
@@ -331,6 +333,16 @@ export default function Home() {
               <ArrowRight className="h-4 w-4" strokeWidth={STROKE} />
             </a>
           </div>
+          <p data-hero className="reveal mt-6 text-sm text-ink-500">
+            ¿Ya tienes web?{" "}
+            <a
+              href="/diagnostico"
+              className="font-medium text-ink-900 underline decoration-accent decoration-2 underline-offset-4"
+            >
+              Haz el diagnóstico gratis
+            </a>{" "}
+            y descubre si Google y la IA te encuentran.
+          </p>
         </div>
 
         {/* Visual: flujo de automatización (doble bisel), con una cinta de
@@ -640,16 +652,6 @@ export default function Home() {
         </div>
       </footer>
     </main>
-  );
-}
-
-/* ---------------- Logotipo ---------------- */
-function Logo({ className = "" }: { className?: string }) {
-  return (
-    <span className={`font-display font-extrabold tracking-tight ${className}`}>
-      <span className="text-ink-900">TA</span>
-      <span className="text-brand-red">MP</span>
-    </span>
   );
 }
 

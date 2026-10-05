@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 import { SITE_URL } from "@/lib/site";
 
 /**
- * Sitemap. Hoy el sitio es una sola landing.
+ * Sitemap: la landing y la herramienta de diagnóstico.
  * Cuando se agreguen páginas (servicios, casos, blog), se suman acá.
  */
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -12,6 +12,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 1,
+    },
+    {
+      url: `${SITE_URL}/diagnostico`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.8,
     },
   ];
 }

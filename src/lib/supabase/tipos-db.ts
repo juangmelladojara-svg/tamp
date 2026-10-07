@@ -62,6 +62,12 @@ export type Database = {
           },
         ];
       };
+      vault_notas: {
+        Row: { carpeta: string; enlaces: string[]; id: string; ruta: string; sincronizado_en: string; titulo: string; user_id: string };
+        Insert: { carpeta: string; enlaces?: string[]; id?: string; ruta: string; sincronizado_en?: string; titulo: string; user_id?: string };
+        Update: { carpeta?: string; enlaces?: string[]; id?: string; ruta?: string; sincronizado_en?: string; titulo?: string; user_id?: string };
+        Relationships: [];
+      };
       tareas: {
         Row: {
           creado_en: string;

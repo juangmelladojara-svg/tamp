@@ -6,6 +6,7 @@ import { SUPABASE_PUBLISHABLE_KEY, SUPABASE_URL } from "@/lib/supabase/config";
 // Proxy (ex-middleware) de Next.js.
 //
 // - tamp.cl: sitio público. /admin no existe acá (404).
+// - yo.tamp.cl: portal personal de Juan (misma mecánica, prefijo /yo).
 // - admin.tamp.cl: el panel. admin.tamp.cl/<ruta> se sirve desde /admin/<ruta>,
 //   se refresca la sesión de Supabase y, sin sesión, todo redirige a /login.
 //
@@ -16,23 +17,27 @@ import { SUPABASE_PUBLISHABLE_KEY, SUPABASE_URL } from "@/lib/supabase/config";
 
 const RUTAS_SIN_SESION = new Set(["/login"]);
 
-function esHostAdmin(host: string): boolean {
-  return host.startsWith("admin.");
+/** Subdominio → carpeta interna que lo sirve. */
+function prefijoDeHost(host: string): "/admin" | "/yo" | null {
+  if (host.startsWith("admin.")) return "/admin";
+  if (host.startsWith("yo.")) return "/yo";
+  return null;
 }
 
 export async function proxy(request: NextRequest) {
   const host = request.headers.get("host") ?? "";
   const { pathname } = request.nextUrl;
 
-  if (!esHostAdmin(host)) {
-    if (pathname === "/admin" || pathname.startsWith("/admin/")) {
-      return new NextResponse("No encontrado", { status: 404 });
-    }
+  const prefijo = prefijoDeHost(host);
+
+  if (!prefijo) {
+    const privada = ["/admin", "/yo"].some((p) => pathname === p || pathname.startsWith(`${p}/`));
+    if (privada) return new NextResponse("No encontrado", { status: 404 });
     return NextResponse.next();
   }
 
   const destino = request.nextUrl.clone();
-  destino.pathname = pathname === "/" ? "/admin" : `/admin${pathname}`;
+  destino.pathname = pathname === "/" ? prefijo : `${prefijo}${pathname}`;
 
   let respuesta = NextResponse.rewrite(destino, { request });
 

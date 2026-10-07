@@ -9,6 +9,95 @@ export type Database = {
   };
   public: {
     Tables: {
+      animo: {
+        Row: {
+          animo: number;
+          creado_en: string;
+          energia: number | null;
+          fecha: string;
+          id: string;
+          nota: string | null;
+          sueno_horas: number | null;
+          user_id: string;
+        };
+        Insert: {
+          animo: number;
+          creado_en?: string;
+          energia?: number | null;
+          fecha?: string;
+          id?: string;
+          nota?: string | null;
+          sueno_horas?: number | null;
+          user_id?: string;
+        };
+        Update: {
+          animo?: number;
+          creado_en?: string;
+          energia?: number | null;
+          fecha?: string;
+          id?: string;
+          nota?: string | null;
+          sueno_horas?: number | null;
+          user_id?: string;
+        };
+        Relationships: [];
+      };
+      habitos: {
+        Row: { activo: boolean; creado_en: string; id: string; nombre: string; user_id: string };
+        Insert: { activo?: boolean; creado_en?: string; id?: string; nombre: string; user_id?: string };
+        Update: { activo?: boolean; creado_en?: string; id?: string; nombre?: string; user_id?: string };
+        Relationships: [];
+      };
+      habitos_registro: {
+        Row: { fecha: string; habito_id: string; user_id: string };
+        Insert: { fecha?: string; habito_id: string; user_id?: string };
+        Update: { fecha?: string; habito_id?: string; user_id?: string };
+        Relationships: [
+          {
+            foreignKeyName: "habitos_registro_habito_id_fkey";
+            columns: ["habito_id"];
+            isOneToOne: false;
+            referencedRelation: "habitos";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      tareas: {
+        Row: {
+          creado_en: string;
+          fecha: string | null;
+          foco: boolean;
+          hecha: boolean;
+          hecha_en: string | null;
+          id: string;
+          prioridad: number;
+          titulo: string;
+          user_id: string;
+        };
+        Insert: {
+          creado_en?: string;
+          fecha?: string | null;
+          foco?: boolean;
+          hecha?: boolean;
+          hecha_en?: string | null;
+          id?: string;
+          prioridad?: number;
+          titulo: string;
+          user_id?: string;
+        };
+        Update: {
+          creado_en?: string;
+          fecha?: string | null;
+          foco?: boolean;
+          hecha?: boolean;
+          hecha_en?: string | null;
+          id?: string;
+          prioridad?: number;
+          titulo?: string;
+          user_id?: string;
+        };
+        Relationships: [];
+      };
       clientes: {
         Row: {
           actualizado_en: string;

@@ -5,7 +5,7 @@ export default function InteriorLayout({ children }: { children: React.ReactNode
   return (
     <>
       <Galaxia nodos={[]} />
-      <main className="relative z-10 mx-auto max-w-3xl px-5 pb-20 pt-24">{children}</main>
+      <main className="relative z-10 mx-auto max-w-3xl px-5 pb-20 pt-36 md:pt-24">{children}</main>
     </>
   );
 }

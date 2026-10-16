@@ -2,36 +2,11 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ChevronDown, Minus, Plus } from "lucide-react";
+import Link from "next/link";
+import { colorCarpeta } from "@/lib/yo/colores";
+import { hrefNota } from "@/lib/yo/vault";
 
 export type NotaVault = { ruta: string; titulo: string; carpeta: string; enlaces: string[] };
-
-// Colores por carpeta, calcados del filtro de Obsidian.
-const COLOR_NUM: Record<string, string> = {
-  "00": "#d9e48c",
-  "01": "#f4903a",
-  "02": "#8fcbe0",
-  "03": "#f09a9a",
-  "04": "#8fe0cc",
-  "05": "#8f94e8",
-  "06": "#c58fe8",
-  "07": "#7fd47f",
-  "08": "#f0d08a",
-  "09": "#a5e07f",
-  "10": "#8fe0cc",
-  "11": "#8fcbe0",
-  "12": "#8f94e8",
-  "13": "#f08fc6",
-  "14": "#c58fe8",
-  "99": "#ef8f8f",
-};
-
-export function colorCarpeta(c: string): string {
-  const m = /^(\d\d) /.exec(c);
-  if (m && COLOR_NUM[m[1]]) return COLOR_NUM[m[1]];
-  if (c.includes("Plantillas")) return "#c6e07f";
-  if (c.includes("Inbox")) return "#f0d08a";
-  return "#8e95a3";
-}
 
 type Nodo = {
   i: number;
@@ -501,6 +476,9 @@ export default function GrafoVault({ notas }: { notas: NotaVault[] }) {
                 {nodoSel.carpeta} · {nodoSel.vecinos.length} {nodoSel.vecinos.length === 1 ? "conexión" : "conexiones"}
               </p>
             </div>
+            <Link href={hrefNota(nodoSel.ruta)} className="rounded-full bg-indigo-400 px-3 py-1 text-sm font-medium text-[#05060f] transition-colors hover:bg-indigo-300">
+              Abrir
+            </Link>
             <button type="button" onClick={() => setSel(null)} className="text-sm text-slate-400 hover:text-white">
               Cerrar
             </button>

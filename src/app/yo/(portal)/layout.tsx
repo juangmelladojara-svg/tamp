@@ -5,6 +5,7 @@ import { sesionPortal } from "@/lib/yo/sesion";
 
 const ENLACES = [
   { href: "/", texto: "Mapa" },
+  { href: "/oficina", texto: "Oficina" },
   { href: "/hoy", texto: "Foco del día" },
   { href: "/seguimiento", texto: "Seguimiento" },
 ];
@@ -26,7 +27,7 @@ export default async function PortalLayout({ children }: { children: React.React
             TAMP
           </a>
         </nav>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 rounded-full border border-white/10 bg-[#0b0d22]/60 p-1 backdrop-blur sm:pl-4">
           <span className="hidden text-xs uppercase tracking-[0.2em] text-indigo-200/60 sm:inline">{perfil?.nombre ?? email}</span>
           <form action={cerrarSesion}>
             <button

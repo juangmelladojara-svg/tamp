@@ -63,9 +63,48 @@ export type Database = {
         ];
       };
       vault_notas: {
-        Row: { carpeta: string; enlaces: string[]; id: string; ruta: string; sincronizado_en: string; titulo: string; user_id: string };
-        Insert: { carpeta: string; enlaces?: string[]; id?: string; ruta: string; sincronizado_en?: string; titulo: string; user_id?: string };
-        Update: { carpeta?: string; enlaces?: string[]; id?: string; ruta?: string; sincronizado_en?: string; titulo?: string; user_id?: string };
+        Row: {
+          carpeta: string;
+          contenido: string;
+          enlaces: string[];
+          etiquetas: string[];
+          id: string;
+          meta: Json;
+          modificado: string | null;
+          ruta: string;
+          sincronizado_en: string;
+          tareas: Json;
+          titulo: string;
+          user_id: string;
+        };
+        Insert: {
+          carpeta: string;
+          contenido?: string;
+          enlaces?: string[];
+          etiquetas?: string[];
+          id?: string;
+          meta?: Json;
+          modificado?: string | null;
+          ruta: string;
+          sincronizado_en?: string;
+          tareas?: Json;
+          titulo: string;
+          user_id?: string;
+        };
+        Update: {
+          carpeta?: string;
+          contenido?: string;
+          enlaces?: string[];
+          etiquetas?: string[];
+          id?: string;
+          meta?: Json;
+          modificado?: string | null;
+          ruta?: string;
+          sincronizado_en?: string;
+          tareas?: Json;
+          titulo?: string;
+          user_id?: string;
+        };
         Relationships: [];
       };
       tareas: {

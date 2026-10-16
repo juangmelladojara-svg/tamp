@@ -13,6 +13,14 @@ export function Migas({ ruta }: { ruta: string[] }) {
       <Link href="/oficina" className="hover:text-white">
         Oficina
       </Link>
+      <ChevronRight className="h-3.5 w-3.5 text-slate-600" />
+      {ruta.length ? (
+        <Link href="/oficina/archivo" className="hover:text-white">
+          Archivo
+        </Link>
+      ) : (
+        <span className="text-slate-200">Archivo</span>
+      )}
       {ruta.map((seg, i) => {
         const dir = ruta.slice(0, i + 1).join("/");
         const ultimo = i === ruta.length - 1;

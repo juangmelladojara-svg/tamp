@@ -4,7 +4,7 @@ import { Star } from "lucide-react";
 import { cargarVault, nombreSala } from "@/lib/yo/oficina";
 import { colorCarpeta } from "@/lib/yo/colores";
 import { directorioDeRuta, hrefNota, RAIZ, segmentosATexto } from "@/lib/yo/vault";
-import { FilaNota, Migas, Panel, TarjetaSala } from "../../piezas";
+import { FilaNota, Migas, Panel, TarjetaSala } from "../../../piezas";
 
 export async function generateMetadata({ params }: PageProps<"/yo/oficina/sala/[...ruta]">) {
   const dir = segmentosATexto((await params).ruta);

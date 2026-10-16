@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "vault:sync": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/sincronizar-vault.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.7",
@@ -17,13 +18,15 @@
     "react-dom": "19.2.4",
     "react-markdown": "^10.1.0",
     "remark-gfm": "^4.0.1",
-    "server-only": "^0.0.1"
+    "server-only": "^0.0.1",
+    "three": "^0.160.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/three": "^0.160.0",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

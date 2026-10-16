@@ -4,8 +4,8 @@ import { ArrowUpRight, Link2 } from "lucide-react";
 import { fechaHoy } from "@/lib/yo/fecha";
 import { cargarNota, cargarVault, fechaCorta } from "@/lib/yo/oficina";
 import { directorioDeRuta, hrefNota, segmentosATexto, type ValorMeta } from "@/lib/yo/vault";
-import ContenidoNota from "../../ContenidoNota";
-import { Chip, Migas } from "../../piezas";
+import ContenidoNota from "../../../ContenidoNota";
+import { Chip, Migas } from "../../../piezas";
 
 export async function generateMetadata({ params }: PageProps<"/yo/oficina/nota/[...ruta]">) {
   return { title: segmentosATexto((await params).ruta).split("/").pop() };
